@@ -9,6 +9,8 @@ import UserRegis from './components/auth/UserRegis';
 import UpdateUser from './components/userspage/UpdateUser';
 import UserManagementPage from './components/userspage/UserManagementPage';
 import ProfilePage from './components/userspage/ProfilePage';
+import ForgotPassword from './components/auth/ForgotPassword';
+import ResetPassword from './components/auth/ResetPassword';
 import { AuthProvider } from './context/AuthContext';
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/register" element={<RegistrationPage />} />
               <Route path="/user-reg" element={<UserRegis />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/admin/user-management" element={<UserManagementPage />} />
               <Route path="/update-user/:userId" element={<UpdateUser />} />
               <Route path="*" element={<Navigate to="/" />} />
