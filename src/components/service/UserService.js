@@ -26,21 +26,37 @@ class UserService{
         }
     }
 
-    // just add
-    static async userreg(userData, token){
-        try{
-            const response = await axios.post(`${UserService.BASE_URL}/auth/user-reg`, userData
-            //     , 
-            // {
-            //     headers: {Authorization: `Bearer ${token}`}
-            // }
-        )
+    // just add & it's wrong sth in header
+    static async userreg(userData) {
+        try {
+            const response = await axios.post(
+                `${UserService.BASE_URL}/auth/user-reg`, 
+                userData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        // Uncomment this if the API requires a token for registration
+                        // 'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
             return response.data;
-        }catch(err){
+        } catch (err) {
+            // Logging the error for debugging
+            console.error("Error registering user:", err.response?.data || err.message);
+            
+            // Specific handling for 403 error
+            if (err.response && err.response.status === 403) {
+                alert("Access is forbidden: You might not have the required permissions.");
+            } else {
+                alert("An error occurred: Some of your information might be duplicated.");
+            }
+            
+            // Throwing the error to keep it manageable further up the stack if needed
             throw err;
-            alert("Some of your information is duplicated")
         }
     }
+    
 
     static async getAllUsers(token){
         try{
@@ -104,6 +120,40 @@ class UserService{
         }
     }
 
+
+    //Reset Password Function
+    static async requestPasswordReset(email) {
+        try {
+            const response = await axios.post(`${UserService.BASE_URL}/forgotPassword/verifyMail/${email}`);
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
+    }   
+
+    // Verify OTP
+    static async verifyOtp(otp, email) {
+        try {
+            const response = await axios.post(`${UserService.BASE_URL}/forgotPassword/verifyOtp/${otp}/${email}`);
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    // Change Password
+    static async resetPassword(email, newPassword, repeatPassword) {
+        try {
+            const response = await axios.post(`${UserService.BASE_URL}/forgotPassword/changePassword/${email}`, {
+                password: newPassword,
+                repeatPassword: repeatPassword
+            });
+            return response.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     /**AUTHENTICATION CHECKER */
     static logout(){
         localStorage.removeItem('token')
@@ -130,6 +180,8 @@ class UserService{
     static adminOnly(){
         return this.isAuthenticated() && this.isAdmin();
     }
+
+
 
 }
 
