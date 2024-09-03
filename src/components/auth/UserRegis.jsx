@@ -20,9 +20,17 @@ function UserRegis() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+    
+        // Log formData to confirm it's being submitted correctly
+        console.log("Submitting form data:", formData);
+    
         try {
-
-            await UserService.userreg(formData);
+            // Submit the form data
+            const response = await UserService.userreg(formData);
+            console.log('User registered successfully:', response);
+    
+            // Display success message
+            alert('User registered successfully');
             
             // Clear the form fields after successful registration
             setFormData({
@@ -32,15 +40,26 @@ function UserRegis() {
                 role: 'USER', // Resetting the role to 'USER'
                 city: ''
             });
-            alert('User registered successfully');
+    
+            // Uncomment if you want to navigate to another page after registration
             navigate('/');  // Redirect to login page after registration
-
+    
         } catch (error) {
+            console.log("Form data at error:", formData);
             console.error('Error registering user:', error);
-            alert('Email duplicated!');
-            
+    
+            // Check if the error is due to a 403 status
+            if (error.response && error.response.status === 403) {
+                alert('Access Denied: You might not have the necessary permissions.');
+            } else if (error.response && error.response.status === 400) {
+                alert('Bad Request: Check your input fields.');
+            } else {
+                // Default error message for other scenarios
+                alert('Email duplicated!');
+            }
         }
     };
+    
 
     return (
         <div className="auth-container">

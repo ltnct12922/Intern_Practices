@@ -52,7 +52,7 @@ function LoginPage() {
                 <p>Don't have an account? <Link to="/user-reg">Register here!</Link></p>
             </div>
             <div className="resetpass-link">
-                <p>Forgot Password? <Link to="/pass-reset">Reset here!</Link></p>
+                <p>Forgot Password? <Link to="/forgot-password">Reset here!</Link></p>
             </div>
     </div>
   );
